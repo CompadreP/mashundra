@@ -29,7 +29,7 @@ from bs4 import BeautifulSoup
 
 
 ########################################################################################################################
-#                                        ЭТО СТАРЫЙ КОД
+#                                        ЭТО НОВЫЙ КОД
 ########################################################################################################################
 
 ### ВАЖНО
@@ -89,8 +89,10 @@ with requests.Session() as s:
     # Собственно так на данном ресурсе и реализована защита от ботов - путем сверки http-заголовка User-Agent.
     s.headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/97.0.4692.71 Safari/537.36'
+                      'Chrome/97.0.4692.71 Safari/537.36',
+        'cookie': r'_ga=GA1.2.227663684.1640797186; _gid=GA1.2.961648405.1642405512; __cf_bm=3P2wTgFcE3Nrx_ygW1m_j_G0iw1lkNcjQstEMhR41WU-1642422905-0-AahT8XITUm3SODL9zjyJ1QNtCLL2fIRcWTpD3C3gW0Rv8rAr5lUeS6F8OZX78q/nV+XsfYMMVJ/VlJTB3fRJSoaeLLi1dHf2brOO+QfwRlYn8/sgAKa2jDTU+1pJOSIICg==; _gat_gtag_UA_68384944_1=1'
     }
+
     # на самом деле хорошей практикой в данном случае является либо выбор заголовка из заранее определенных (в коде),
     # а еще лучше установка этого заголовка в соответствии со значением из переменной окружения, но переменные окружения
     # - это отдельная тема
@@ -106,7 +108,8 @@ with requests.Session() as s:
         # форматирования с помощью литерала % и метода .format(), да и выглядят значительно читабельнее
         page_html = s.get(f"https://icdlist.com/icd-10/{decease_id}")
         soup = BeautifulSoup(page_html.content, 'html.parser')
-        parent_ul_element = soup.find('section', id=f"Synonyms-{decease_id.replace('.','')}")
+        parent_ul_element = soup.find('section',
+                                      id=f"Synonyms-{decease_id.replace('.', '')}")
         if parent_ul_element:
             ul_element = parent_ul_element.find('ul')
             for li_element in ul_element.contents:
